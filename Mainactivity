@@ -1,0 +1,107 @@
+package myapplication.com.nguphaptiengnhat;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+
+import myapplication.com.adapter.CategoryAdapter;
+import myapplication.com.model.Category;
+
+public class MainActivity extends AppCompatActivity {
+
+    public static String DATABASE_NAME ="data.sqlite";
+    public static SQLiteDatabase database=null;
+    public static String CaregoryTableName = "datanguphapn2";
+    String DB_PATH_SUFFIX="/database/";
+
+    ListView lvAll;
+    ArrayList<Category>categories;
+    CategoryAdapter categoryAdapter;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        processCoppy();
+        addcontrols();
+        DetailAll();
+
+    }
+
+
+    private void DetailAll() {
+        database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE, null);
+        Cursor c = database.query("datanguphapn2",null,null,null,null,null,null);
+        categories.clear();
+
+        while (c.moveToNext()){
+            int Idnumber = c.getInt(0);
+            String TitleJa = c.getString(1);
+            String TitleVn = c.getString(2);
+            String Detail = c.getString(3);
+            int Yeuthich = c.getInt(4);
+            Category category = new Category(Idnumber,TitleJa,TitleVn,Detail,Yeuthich);
+            categories.add(category);
+        }
+        c.close();
+        categoryAdapter.notifyDataSetChanged();
+    }
+
+    private void addcontrols() {
+        lvAll = findViewById(R.id.lvCategory);
+        categories= new ArrayList<Category>();
+        categoryAdapter = new CategoryAdapter(MainActivity.this,categories);
+        lvAll.setAdapter(categoryAdapter);
+    }
+
+    // 3 hàm sao chép Database //
+    private void processCoppy() {
+        File dbFile = getDatabasePath(DATABASE_NAME);
+        if (!dbFile.exists()) {
+            try {
+                CopyDataBaseFromAsset();
+            } catch (Exception e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+        Toast.makeText(this,"ok roi day", Toast.LENGTH_SHORT).show();
+    }
+
+    private void CopyDataBaseFromAsset() {
+        try {
+            InputStream myInput = getAssets().open(DATABASE_NAME);
+            String outFileName = layDuongDanLuuTru();
+            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+            if (!f.exists()) {
+                f.mkdir();
+            }
+            OutputStream myOutput = new FileOutputStream(outFileName);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = myInput.read(buffer)) > 0) {
+                myOutput.write(buffer, 0, length);
+            }
+            myOutput.flush();
+            myOutput.close();
+            myInput.close();
+        } catch (Exception ex) {
+            Log.e("Loi_SaoChep", ex.toString());
+        }
+    }
+
+    private String layDuongDanLuuTru() {
+        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
+    }
+
+}
