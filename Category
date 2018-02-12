@@ -1,0 +1,65 @@
+package myapplication.com.model;
+
+/**
+ * Created by LeThanhNam on 2018/02/11.
+ */
+
+public class Category {
+    private int Idnum;
+    private String TitleJa;
+    private String TilteVn;
+    private String Detail;
+    private int Yeuthich;
+
+    public Category() {
+    }
+
+    public Category(int idnum, String titleJa, String tilteVn, String detail, int yeuthich) {
+        Idnum = idnum;
+        TitleJa = titleJa;
+        TilteVn = tilteVn;
+        Detail = detail;
+        Yeuthich = yeuthich;
+    }
+
+    public int getIdnum() {
+        return Idnum;
+    }
+
+    public void setIdnum(int idnum) {
+        Idnum = idnum;
+    }
+
+    public String getTitleJa() {
+        return TitleJa;
+    }
+
+    public void setTitleJa(String titleJa) {
+        TitleJa = titleJa;
+    }
+
+    public String getTilteVn() {
+        return TilteVn;
+    }
+
+    public void setTilteVn(String tilteVn) {
+        TilteVn = tilteVn;
+    }
+
+    public String getDetail() {
+        return Detail;
+    }
+
+    public void setDetail(String detail) {
+        Detail = detail;
+    }
+
+    public int getYeuthich() {
+        return Yeuthich;
+    }
+
+    public void setYeuthich(int yeuthich) {
+        Yeuthich = yeuthich;
+    }
+}
+
