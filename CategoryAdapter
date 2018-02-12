@@ -1,0 +1,75 @@
+package myapplication.com.adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import myapplication.com.model.Category;
+import myapplication.com.nguphaptiengnhat.R;
+
+/**
+ * Created by LeThanhNam on 2018/02/11.
+ */
+
+public class CategoryAdapter extends BaseAdapter {
+    Context context;
+    ArrayList<Category>categories;
+    LayoutInflater inflater;
+
+    public CategoryAdapter(Context context,ArrayList<Category>categories){
+        this.context=context;
+        this.categories=categories;
+        inflater= LayoutInflater.from(context);
+
+    }
+
+    @Override
+    public int getCount() {
+        return categories.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return categories.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View view, ViewGroup parent) {
+        ViewHolder viewHolder= null;
+        if (view == null) {
+            viewHolder = new ViewHolder();
+            view = inflater.inflate(R.layout.item_listview,null);
+            viewHolder.tvNum = view.findViewById(R.id.tvNum);
+            viewHolder.tvJa = view.findViewById(R.id.tvJa);
+            viewHolder.tvVn = view.findViewById(R.id.tvVn);
+            view.setTag(viewHolder);
+
+        }else{
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        Category ct = categories.get(position);
+        viewHolder.tvNum.setText(ct.getIdnum());
+        viewHolder.tvJa.setText("~" + ct.getTitleJa());
+        viewHolder.tvVn.setText("~" + ct.getTitleJa());
+        return view;
+
+    }
+
+    private  class ViewHolder{
+        public TextView tvNum;
+        public TextView tvJa;
+        public TextView tvVn;
+        public TextView tvDetail;
+    }
+}
